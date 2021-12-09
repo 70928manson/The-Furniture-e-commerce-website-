@@ -5,8 +5,12 @@ const token = "KUF0FVQiozV0N70IPnaxWELvZeM2";
 const list = document.querySelector('.productWrap')
 
 const addBtn = document.querySelector('.addCardBtn');
+const cartList = document.querySelector('.cartList');
+const cartTotal = document.querySelector('.cartTotal')
 
 let productData = [];
+let cartData = [];
+let cartTotalPrice;
 
 init();
 
@@ -40,5 +44,45 @@ function renderProductList(){
   list.innerHTML = str;
 }
 function getCartList(){
-  
+  axios.get(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/carts`)
+  .then(function (response){
+    cartData = response.data.carts;
+
+    cartTotalPrice = response.data.finalTotal;
+
+    renderCartList();
+    renderCartTotalPrice();
+  })
+}
+function renderCartList(){
+  let str = "";
+  cartData.forEach(function (item){
+    str += `
+    <td>
+        <div class="cardItem-title">
+            <img src="${item.product.images}" alt="" referrerpolicy="no-referrer">
+            <p>${item.product.title}</p>
+         </div>
+    </td>
+         <td>NT$${item.product.price}</td>
+        <td>${item.quantity}</td>
+        <td>NT$${item.product.price * item.quantity}</td>
+         <td class="discardBtn">
+         <a href="#" class="material-icons">
+            clear
+         </a>
+    </td>
+    `
+  })
+
+  cartList.innerHTML = str;
+ 
+}
+
+function renderCartTotalPrice(){
+  cartTotal.innerHTML = `NT$${cartTotalPrice}`;
+}
+
+function addCartItem(){
+  ;
 }
