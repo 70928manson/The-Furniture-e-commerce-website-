@@ -320,24 +320,21 @@ body {
   justify-content: space-between;
   margin-bottom: 60px;
 
-  overflow:hidden;
-
+  overflow: hidden;
 }
 
 .bedAdvantage-img {
-
   max-height: 140px;
 
   -o-object-fit: cover;
   object-fit: cover;
   margin-bottom: 10px;
 
-  transform:scale(1,1);
+  transform: scale(1, 1);
   transition: all 1s ease-out;
-
 }
 .bedAdvantage-img:hover {
-  transform:scale(1.08,1.08);
+  transform: scale(1.08, 1.08);
 }
 .bedAdvantage-text {
   text-align: center;

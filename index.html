@@ -284,48 +284,56 @@
             <option value="收納">收納</option>
             <option value="窗簾">窗簾</option>
         </select>
+
         <ul class="productWrap">
-          <!--產品axios get後渲染於此-->
+          <!--產品axios get後渲染於此--> <!--產品axios get後渲染於此-->
         </ul>
+
     </section>
     <section class="shoppingCart">
         <h3 class="section-title">我的購物車</h3>
         <div class="overflowWrap">
             <table class="shoppingCart-table">
-                <tr>
-                    <th width="40%">品項</th>
-                    <th width="15%">單價</th>
-                    <th width="15%">數量</th>
-                    <th width="15%">金額</th>
-                    <th width="15%"></th>
-                </tr>
-                <tr class = "cartList">
-                    <td>
-                        <div class="cardItem-title">
-                            <img src="https://i.imgur.com/HvT3zlU.png" alt="" referrerpolicy="no-referrer">
-                            <p>Antony 雙人床架／雙人加大</p>
-                        </div>
-                    </td>
-                    <td>NT$12,000</td>
-                    <td>1</td>
-                    <td>NT$12,000</td>
-                    <td class="discardBtn">
-                        <a href="#" class="material-icons">
-                            clear
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#" class="discardAllBtn">刪除所有品項</a>
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <p>總金額</p>
-                    </td>
-                    <td class = "cartTotal">NT$0</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th width="40%">品項</th>
+                        <th width="15%">單價</th>
+                        <th width="15%">數量</th>
+                        <th width="15%">金額</th>
+                        <th width="15%"></th>
+                    </tr>
+                </thead>
+                <tbody class = "shoppingCart-tableList">
+                    <tr class = "cartList">
+                        <td>
+                            <div class="cardItem-title">
+                                <img src="https://i.imgur.com/HvT3zlU.png" alt="" referrerpolicy="no-referrer">
+                                <p>Antony 雙人床架／雙人加大</p>
+                            </div>
+                        </td>
+                        <td>NT$12,000</td>
+                        <td>1</td>
+                        <td>NT$12,000</td>
+                        <td class="discardBtn">
+                            <a href="#" class="material-icons">
+                                clear
+                            </a>
+                        </td>
+                    </tr>
+                <tbody>
+                <tfoot>
+                    <tr>
+                        <td>
+                            <a href="#" class="discardAllBtn">刪除所有品項</a>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <p>總金額</p>
+                        </td>
+                        <td class = "cartTotal">NT$12000</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </section>
