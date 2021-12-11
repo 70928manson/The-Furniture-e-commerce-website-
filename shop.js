@@ -176,3 +176,83 @@ shoppingCart_tableList.addEventListener('click', function(e){
   })
   
 })
+
+//發送訂單to後台 老闆發大財
+
+const orderInfo_btn = document.querySelector('.orderInfo-btn');
+orderInfo_btn.addEventListener('click', function(e){
+  e.preventDefault();
+
+  const customerName = document.querySelector('#customerName').value;
+const customerPhone = document.querySelector('#customerPhone').value;
+const customerEmail = document.querySelector('#customerEmail').value;
+const customerAddress = document.querySelector('#customerAddress').value;
+const customerTradeWay = document.querySelector('#tradeWay').value;
+
+  if (customerName == "" || customerPhone=="" || customerEmail== "" || customerAddress=="" || customerTradeWay==""){
+    alert("請輸入完整資訊 ouo");
+    return;
+  }
+  //vaildate.js 看phone格式
+  if(validatePhone(customerPhone) == false){
+    alert('你的電話格式好像錯了QQ');
+    return;
+  }
+  //vaildate.js 看email格式
+  if(validateEmail(customerEmail) == false){
+    alert('你的Email格式好像錯了QQ');
+    return;
+  }
+  axios.post(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/orders`, {
+    "data":{
+      "user":{
+        "name": customerName,
+        "tel": customerPhone,
+        "email": customerEmail,
+        "address": customerAddress,
+        "payment": customerTradeWay
+      }
+    }
+  }).then(function (response){
+    alert("訂單建立成功");
+    //清除表單內容 增加使用者體驗
+    customerName.value = '';
+    customerPhone.value = '';
+    customerEmail.value = '';
+    customerAddress.value = '';
+    customerTradeWay.value = 'ATM';
+    getCartList();
+  })
+
+  //改紅字提醒專區
+  const customerEmail = document.querySelector("#customerEmail");
+  customerEmail.addEventListener("blur",function(e){
+  if (validateEmail(customerEmail.value) == false) {
+    document.querySelector(`[data-message=Email]`).textContent = "請填寫正確 Email 格式";
+    return;
+  }
+})
+  
+
+})
+
+
+// util js、元件
+function toThousands(x) {
+  let parts = x.toString().split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return parts.join(".");
+}
+
+function validateEmail(mail) {
+  if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail)) {
+    return true
+  }
+  return false;
+}
+function validatePhone(phone) {
+  if (/^[09]{2}\d{8}$/.test(phone)) {
+    return true
+  }
+  return false;
+}
