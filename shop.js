@@ -26,7 +26,7 @@ function getProductList(){
     productData = response.data.products;
     renderProductList();
   }).catch(function (error){
-    console.log(error);
+    console.log(error.message);
   })
 }
 function renderProductList(product_category){
@@ -47,8 +47,8 @@ function renderProductList(product_category){
                 <img src="${item.images}" alt="">
                 <a href="#" class="addCardBtn" data-id = "${item.id}">加入購物車</a>
                 <h3>${item.title}</h3>
-                <del class="originPrice">NT$${item.origin_price}</del>
-                <p class="nowPrice">NT${item.price}</p>
+                <del class="originPrice">NT$${toThousands(item.origin_price)}</del>
+                <p class="nowPrice">NT${toThousands(item.price)}</p>
             </li>`;
   })
   productList.innerHTML = str;
@@ -135,7 +135,7 @@ productList.addEventListener('click' ,function (e){
     alert("加入購物車");
     getCartList();
   }).catch(function (error){
-    console.log(error);
+    console.log(error.message);
   })
  
 });  
@@ -151,7 +151,7 @@ discardAllBtn.addEventListener('click', function(e){
     alert('購物車全數刪除成功~');
     getCartList();
   }).catch(function (error){
-    alert('購物車已清空，請勿重複點擊~');
+    alert(error.message);
   })
 })
 
@@ -172,13 +172,12 @@ shoppingCart_tableList.addEventListener('click', function(e){
     alert('此購物車項目刪除成功~');
     getCartList();
   }).catch(function (error){
-    alert('鼻要再按了OAO');
+    alert(error.message);
   })
   
 })
 
 //發送訂單to後台 老闆發大財
-
 const orderInfo_btn = document.querySelector('.orderInfo-btn');
 orderInfo_btn.addEventListener('click', function(e){
   e.preventDefault();
@@ -222,10 +221,12 @@ const customerTradeWay = document.querySelector('#tradeWay').value;
     customerAddress.value = '';
     customerTradeWay.value = 'ATM';
     getCartList();
+  }).catch(function (error){
+    alert('購物車是空的QAQ');
   })
 
   //改紅字提醒專區
-  const customerEmail = document.querySelector("#customerEmail");
+  // const customerEmail = document.querySelector("#customerEmail");
   customerEmail.addEventListener("blur",function(e){
   if (validateEmail(customerEmail.value) == false) {
     document.querySelector(`[data-message=Email]`).textContent = "請填寫正確 Email 格式";
