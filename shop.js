@@ -2,18 +2,11 @@
 const api_path = "70928manson";
 const token = "KUF0FVQiozV0N70IPnaxWELvZeM2";
 
-//總商品DOM
+//總商品
 const productList = document.querySelector('.productWrap')
-
-//購物車DOM
-  //產品頁新增購物車
-const cartAddBtn = document.querySelector('.addCardBtn');
-  //購物車頁面
-const shoppingCart_tableList = document.querySelector('.shoppingCart-tableList');
-const cartTotal = document.querySelector('.cartTotal')
-
 let productData = [];
 
+//購物車資料
 let cartData = [];
 let cartTotalPrice;
 
@@ -64,12 +57,18 @@ function renderProductList(product_category){
 //產品篩選
 const productSelect = document.querySelector('.productSelect');
 productSelect.addEventListener('change', filter);
-
 function filter(){
   renderProductList(productSelect.value);
 }
 
 //購物車
+  //產品頁新增購物車
+const cartAddBtn = document.querySelector('.addCardBtn');
+  //購物車頁面
+const shoppingCart_tableList = document.querySelector('.shoppingCart-tableList');
+const cartTotal = document.querySelector('.cartTotal')
+
+
 function getCartList(){
   axios.get(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/carts`)
   .then(function (response){
@@ -94,7 +93,7 @@ function renderCartList(){
         <td>${item.quantity}</td>
         <td>NT$${item.product.price * item.quantity}</td>
          <td class="discardBtn">
-         <a href="#" class="material-icons">
+         <a href="#" class="material-icons" data-cartID = "${item.id}">
             clear
          </a>
     </td>
@@ -107,7 +106,7 @@ function renderCartList(){
   cartTotal.innerHTML = `NT$${cartTotalPrice}`;
 }
 
-//新增至購物車
+//新增至購物車 ----------------------------------------------------------------------------------------------------
 productList.addEventListener('click' ,function (e){
   e.preventDefault();
 
@@ -117,7 +116,7 @@ productList.addEventListener('click' ,function (e){
   }
 
   let productId = e.target.getAttribute('data-id');
-  let numCheck = 0;
+  let numCheck = 1;  //此處不能為0，numcheck = 0 post回傳400錯誤
 
   cartData.forEach(function (item){
     if(item.product.id === productId){
@@ -128,12 +127,52 @@ productList.addEventListener('click' ,function (e){
   
   axios.post(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/carts`, {
     "data" :{
-      "productID": productId,
+      "productId": productId,
       "quantity": numCheck
     }
   }).then(function (response){
+    console.log(response.data);
     alert("加入購物車");
     getCartList();
+  }).catch(function (error){
+    console.log(error);
   })
  
 });  
+
+//刪除購物車全部項目
+const discardAllBtn = document.querySelector('.discardAllBtn');
+
+discardAllBtn.addEventListener('click', function(e){
+  e.preventDefault();
+
+  axios.delete(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/carts`)
+  .then(function (response){
+    alert('購物車全數刪除成功~');
+    getCartList();
+  }).catch(function (error){
+    alert('購物車已清空，請勿重複點擊~');
+  })
+})
+
+//刪除購物車特定項目
+shoppingCart_tableList.addEventListener('click', function(e){
+  e.preventDefault();
+
+  let deleteCartClass = e.target.getAttribute('class');
+  if(deleteCartClass !== "material-icons"){
+    return;
+  }
+
+  let cartDataID = e.target.getAttribute('data-cartID');
+  console.log(cartDataID);
+
+  axios.delete(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/carts/${cartDataID}`)
+  .then(function (response){
+    alert('此購物車項目刪除成功~');
+    getCartList();
+  }).catch(function (error){
+    alert('鼻要再按了OAO');
+  })
+  
+})
