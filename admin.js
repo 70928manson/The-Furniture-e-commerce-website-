@@ -19,7 +19,7 @@ function getOrder(){
         }
     })
     .then(function (response){
-        console.log(response.data.orders);
+        //console.log(response.data.orders);
         orderData = response.data.orders;
         renderOrder();
     }).catch(function (error){
@@ -50,7 +50,6 @@ function renderOrder(){
     }else{
       orderStatus = "未處理"
     }
-    // 組訂單字串
 
         str += `
     <tr>
@@ -66,10 +65,10 @@ function renderOrder(){
         </td>
         <td>${orderTime}</td>
         <td class="orderStatus">
-          <a href="#" data-status="${item.paid}" class="orderStatus">${orderStatus}</a>
+          <a href="#" data-status="${item.paid}" class="orderStatus" data-id="${item.id}">${orderStatus}</a>
         </td>
         <td>
-          <input type="button" class="delSingleOrder-Btn" value="刪除">
+          <input type="button" class="delSingleOrder-Btn js-orderDelete" data-id="${item.id}" value="刪除">
         </td>
     </tr>`
     })
@@ -78,7 +77,6 @@ function renderOrder(){
 }
 
 function renderC3(){
-  console.log('a');
   let obj = {};
   orderData.forEach(function (item){
     item.products.forEach(function(productItem ){  //productItem = item.products
@@ -89,11 +87,11 @@ function renderC3(){
       }
     })
   })
-  console.log(obj);
+  //console.log(obj);
 
   //c3要得格式[ ['產品A名稱', A占比],  ['產品B名稱', B占比...] ]
   let orignAry = Object.keys(obj); //先把所有產品名稱抓出來
-  console.log(orignAry);
+  //console.log(orignAry);
     //透過originAry得到名稱，再用obj[originAry]得到值 整理成 C3 格式
   let c3OrderAry = [];
   orignAry.forEach(function (item){
@@ -102,7 +100,7 @@ function renderC3(){
     ary.push(obj[item]);
     c3OrderAry.push(ary);
   });
-  console.log(c3OrderAry);
+  //console.log(c3OrderAry);
 
   // 比大小，降冪排列（目的：取營收前三高的品項當主要色塊，把其餘的品項加總起來當成一個色塊）
   // sort: https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
@@ -136,3 +134,84 @@ function renderC3(){
   });
 }
 
+//刪除全部
+const discardAllBtn = document.querySelector('.discardAllBtn');
+discardAllBtn.addEventListener('click', function(e){
+  e.preventDefault();
+  console.log(e.target);
+  axios.delete(`https://livejs-api.hexschool.io/api/livejs/v1/admin/${api_path}/orders`, {
+        headers: {
+            'Authorization': `${token}`,
+        }
+    })
+    .then(function (response){
+      alert('訂單全數刪除成功~');
+      getOrder();
+    })
+})
+
+//大範圍監聽
+order_list.addEventListener('click', function(e){
+  e.preventDefault();
+  //console.log(e.target);
+  let targetClass = e.target.getAttribute('class');
+  let id = e.target.getAttribute("data-id");
+
+  if(targetClass === "delSingleOrder-Btn js-orderDelete"){
+    //刪除特定訂單
+    deleteOrderItem(id);
+    return;
+  }
+  if(targetClass === "orderStatus"){
+    let status = e.target.getAttribute('data-status');
+    changeOrderStatus(status, id);
+  }
+});
+
+//刪除特定訂單
+function deleteOrderItem(id){
+  axios.delete(`https://livejs-api.hexschool.io/api/livejs/v1/admin/${api_path}/orders/${id}`, {
+    headers: {
+        'Authorization': `${token}`,
+    }
+  }).then(function (response){
+    alert('該筆訂單刪除成功囉~');
+    getOrder();
+  })
+}
+
+//修改狀態
+
+function changeOrderStatus(status,id){
+  console.log(status,id);
+
+  let newStatus;
+
+  //把未處理變成已處理           //已處理變成未處理?
+  if(status == true){
+    newStatus = false;
+  }else{
+    newStatus = true;
+  }
+
+  console.log(`status:${status}, change ${newStatus}`);
+
+  //put 修改訂單狀態
+  axios.put(`https://livejs-api.hexschool.io/api/livejs/v1/admin/${api_path}/orders`,{
+    "data": {
+      "id": id,
+      "paid": newStatus,
+    }
+  } ,{
+    headers: {
+      'Authorization': token,
+    }
+  })
+  .then(function(response){
+    alert("修改訂單成功");
+    console.log(response.data);
+    getOrder();
+  }).catch(function (error){
+    console.log(error.message);
+  })
+}

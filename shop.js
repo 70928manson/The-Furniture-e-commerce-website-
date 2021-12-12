@@ -106,7 +106,7 @@ function renderCartList(){
   cartTotal.innerHTML = `NT$${cartTotalPrice}`;
 }
 
-//新增至購物車 ----------------------------------------------------------------------------------------------------
+//新增至購物車
 productList.addEventListener('click' ,function (e){
   e.preventDefault();
 
@@ -120,7 +120,7 @@ productList.addEventListener('click' ,function (e){
 
   cartData.forEach(function (item){
     if(item.product.id === productId){
-      numCheck = item.quantity++;
+      numCheck = ++item.quantity;  //這邊若是item.quantity++ 對一個產品按兩次加入購物車不會+1  要item.quantity+=1 或 ++item.quantity
     }
   })
 
