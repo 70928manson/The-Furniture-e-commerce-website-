@@ -183,10 +183,10 @@ orderInfo_btn.addEventListener('click', function(e){
   e.preventDefault();
 
   const customerName = document.querySelector('#customerName').value;
-const customerPhone = document.querySelector('#customerPhone').value;
-const customerEmail = document.querySelector('#customerEmail').value;
-const customerAddress = document.querySelector('#customerAddress').value;
-const customerTradeWay = document.querySelector('#tradeWay').value;
+  const customerPhone = document.querySelector('#customerPhone').value;
+  const customerEmail = document.querySelector('#customerEmail').value;
+  const customerAddress = document.querySelector('#customerAddress').value;
+  const customerTradeWay = document.querySelector('#tradeWay').value;
 
   if (customerName == "" || customerPhone=="" || customerEmail== "" || customerAddress=="" || customerTradeWay==""){
     alert("請輸入完整資訊 ouo");
@@ -215,12 +215,13 @@ const customerTradeWay = document.querySelector('#tradeWay').value;
   }).then(function (response){
     alert("訂單建立成功");
     //清除表單內容 增加使用者體驗
-    customerName.value = '';
-    customerPhone.value = '';
-    customerEmail.value = '';
-    customerAddress.value = '';
-    customerTradeWay.value = 'ATM';
+    document.querySelector("#customerName").value="";
+    document.querySelector("#customerPhone").value="";
+    document.querySelector("#customerEmail").value="";
+    document.querySelector("#customerAddress").value="";
+    document.querySelector("#tradeWay").value="ATM";
     getCartList();
+    //!! 對customerName等變數做更動，不會改到html
   }).catch(function (error){
     alert('購物車是空的QAQ');
   })
