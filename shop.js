@@ -78,6 +78,16 @@ function getCartList(){
     renderCartList();
   })
 }
+
+
+/* <button class="todo-button" type="submit">
+        <i class="fas fa-plus-square"></i>    <!--font awesome的icon-->
+      </button> */
+
+//https://codepen.io/5quvgp2z/pen/eYGmgEY?editors=0111
+
+
+
 function renderCartList(){
   let str = "";
   cartData.forEach(function (item, index){
@@ -90,7 +100,13 @@ function renderCartList(){
          </div>
     </td>
          <td>NT$${item.product.price}</td>
-        <td>${item.quantity}</td>
+        <td>
+        <i class="fas fa-minus shoppingCart-table--quantity" data-icon = "shoppingCart-minus" data-productID = "${item.product.id}"></i>
+      
+        ${item.quantity}
+
+        <i class="fas fa-plus shoppingCart-table--quantity" data-icon = "shoppingCart-add" data-productID = "${item.product.id}"></i>
+        </td>
         <td>NT$${item.product.price * item.quantity}</td>
          <td class="discardBtn">
          <a href="#" class="material-icons" data-cartID = "${item.id}">
@@ -131,7 +147,7 @@ productList.addEventListener('click' ,function (e){
       "quantity": numCheck
     }
   }).then(function (response){
-    console.log(response.data);
+    //console.log(response.data);
     alert("加入購物車");
     getCartList();
   }).catch(function (error){
@@ -165,7 +181,7 @@ shoppingCart_tableList.addEventListener('click', function(e){
   }
 
   let cartDataID = e.target.getAttribute('data-cartID');
-  console.log(cartDataID);
+  //console.log(cartDataID);
 
   axios.delete(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/carts/${cartDataID}`)
   .then(function (response){
@@ -176,6 +192,90 @@ shoppingCart_tableList.addEventListener('click', function(e){
   })
   
 })
+
+// + -紐
+  //減少項目
+shoppingCart_tableList.addEventListener('click', function(e){
+  //console.log(e.target);
+  e.preventDefault();
+
+  let shopCartMinus = e.target.getAttribute('data-icon');
+  if(shopCartMinus !== "shoppingCart-minus"){
+    return;
+  }
+
+  let productId = e.target.getAttribute('data-productID');
+  let numCheck = 1;  
+
+  cartData.forEach(function (item){
+    if(item.product.id === productId){
+      if(item.quantity-1 > 0){
+        numCheck = item.quantity-=1; 
+        changeQuantity();
+        alert("減少成功~");
+      }else if(item.quantity-1 == 0){
+        alert("項目只剩下一個了QAQ");
+        return;
+      }
+      else if(item.quantity-1 < 0){
+        alert('項目已經歸零了QAQ');
+        return;
+      }
+    }
+  })
+
+  function changeQuantity(){
+    axios.post(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/carts`, {
+    "data" :{
+      "productId": productId,
+      "quantity": numCheck
+    }
+  }).then(function (response){
+    //console.log(response.data);
+    getCartList();
+  }).catch(function (error){
+    console.log(error.message);
+  })
+  }
+  
+})
+
+  //增加項目
+shoppingCart_tableList.addEventListener('click', function(e){
+  //console.log(e.target);
+  e.preventDefault();
+
+  let shopCartMinus = e.target.getAttribute('data-icon');
+  if(shopCartMinus !== "shoppingCart-add"){
+    return;
+  }
+
+  let productId = e.target.getAttribute('data-productID');
+  let numCheck = 1;  
+
+  cartData.forEach(function (item){
+    if(item.product.id === productId){
+          numCheck = ++item.quantity;
+          changeQuantity();
+          alert('項目增加成功~');
+        }
+  })
+
+  function changeQuantity(){
+    axios.post(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/carts`, {
+    "data" :{
+      "productId": productId,
+      "quantity": numCheck
+    }
+  }).then(function (response){
+    //console.log(response.data);
+    getCartList();
+  }).catch(function (error){
+    console.log(error.message);
+  })
+  }
+})
+
 
 //發送訂單to後台 老闆發大財
 const orderInfo_btn = document.querySelector('.orderInfo-btn');
@@ -234,7 +334,6 @@ orderInfo_btn.addEventListener('click', function(e){
     return;
   }
 })
-  
 
 })
 

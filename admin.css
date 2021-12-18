@@ -76,6 +76,7 @@ body {
 .wrap {
   max-width: 1400px; /*1110*/
   margin: 0 auto;
+  flex-direction: row;
 }
 
 .topBar {
@@ -219,6 +220,15 @@ body {
   left: 50px;
   bottom: 50px;
   font-weight: normal;
+}
+
+.cc1{
+  width: 50%;
+  display: inline;
+}
+.cc2{
+  width: 50%;
+  display: inline;
 }
 
 .section-title {

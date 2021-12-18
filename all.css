@@ -728,6 +728,20 @@ body {
   border-bottom: 0;
 }
 
+.shoppingCart-table--quantity {
+  padding: 10px;
+  font-size: 15px;
+}
+.shoppingCart-table--quantity:hover {
+  color: #6a33f8;
+  -webkit-transform: scale(1.3);
+  transform: scale(1.3);
+}
+
+.shoppingCart-table--quantity-active {
+  color: red;
+}
+
 @media (max-width: 767px) {
   .shoppingCart-table {
     width: 700px;
