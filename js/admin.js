@@ -73,6 +73,7 @@ function renderOrder(){
     </tr>`
     })
     order_list.innerHTML = str;
+
     renderC3_1();
     renderC3_2() 
 }
@@ -222,20 +223,19 @@ function deleteOrderItem(id){
 }
 
 //修改狀態
-
 function changeOrderStatus(status,id){
-  console.log(status,id);
+  //console.log(status,id);
 
   let newStatus;
 
-  //把未處理變成已處理           //已處理變成未處理?
-  if(status == true){
+  //把未處理變成已處理           
+  if(status == "true"){     //注意此處"true"需為字串型別，才能在未處理/已處理之間切換
     newStatus = false;
   }else{
     newStatus = true;
   }
 
-  console.log(`status:${status}, change ${newStatus}`);
+  //console.log(`status:${status}, change ${newStatus}`);
 
   //put 修改訂單狀態
   axios.put(`https://livejs-api.hexschool.io/api/livejs/v1/admin/${api_path}/orders`,{
