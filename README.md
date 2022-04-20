@@ -1,4 +1,4 @@
-# WOWO_Furniture_e-commerce_website-
+# WOWO Furniture
 Home is not just a place to display beautiful objects, it is where we live. 
 
 Wowo furniture, the best choice for your furniture 
